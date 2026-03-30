@@ -47,6 +47,7 @@ crops:
   # "baseline"           : Only RandomResizedCrop + Horizontal Flip (DINOv2 Defaults)
   # "vflip"              : Baseline + Vertical Flip
   # "rotate90"           : Baseline + 90-degree Rotations
+  # "ect"                : Baseline + Random Resized Crop with ratio (1.0, 1.0)
   # "colorjitter_weak"   : Baseline + Subtle Color Shifts
   # "colorjitter_strong" : Baseline + Aggressive Color Shifts
   # "blur_weak"          : Baseline + Subtle Out-of-focus
@@ -62,7 +63,7 @@ crops:
   # "jpeg"               : Baseline + JPEG Artifacts
   # "combo"              : FULL PIPELINE
   # ------------------------------
-  ablation_mode: "vflip" # RSG - modify for aug type ablation
+  ablation_mode: "rotate90" # RSG - modify for aug type ablation
   local_crops_size: 98
 evaluation:
   eval_period_iterations: 2500 # save checkpoint every 10 epochs # RSG - changed from 5000

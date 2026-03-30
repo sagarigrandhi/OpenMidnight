@@ -367,7 +367,7 @@ class DataAugmentationDINO(object):
         local_crops_number,
         global_crops_size=224,
         local_crops_size=96,
-        ablation_mode="baseline", # This controls the abalation choices (baseline only applies the RandomResizeCrop + Horizontal Flip)
+        ablation_mode="baseline", # This controls the ablation choices (baseline only applies the RandomResizeCrop + Horizontal Flip)
     ):
         self.global_crops_scale = global_crops_scale
         self.local_crops_scale = local_crops_scale
@@ -393,7 +393,7 @@ class DataAugmentationDINO(object):
         rs_hyper = None       
         use_elastic = False
         use_jpeg = False
-        # use_ect = False
+        use_ect = False
 
         if ablation_mode == "baseline":
             pass
@@ -401,6 +401,8 @@ class DataAugmentationDINO(object):
             vflip_p = 0.5
         elif ablation_mode == "rotate90":
             rotate90_p = 0.5
+        elif ablation_mode == "ect":
+            use_ect = True
             
         # Color Jitter Ablations
         elif ablation_mode == "colorjitter_weak":
@@ -466,6 +468,7 @@ class DataAugmentationDINO(object):
         logger.info(f" [ON] HorizontalFlip (p=0.5)")
         logger.info(f" [{'ON' if vflip_p > 0 else 'OFF'}] VerticalFlip (p={vflip_p})")
         logger.info(f"[{'ON' if rotate90_p > 0 else 'OFF'}] Rotate90 (p={rotate90_p})")
+        logger.info(f" [{'ON' if use_ect else 'OFF'}] ECT (ratio=(1.0, 1.0))")
         
         if cj_params:
             logger.info(f" [ON] ColorJitter (B:{cj_params[0]}, C:{cj_params[1]}, S:{cj_params[2]}, H:{cj_params[3]})")
@@ -483,15 +486,24 @@ class DataAugmentationDINO(object):
         logger.info(f"[{'ON' if use_jpeg else 'OFF'}] JPEG Compression")
         logger.info("=========================================\n")
 
-
-        geom_global =[
-            transforms.RandomResizedCrop(global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC),
-            transforms.RandomHorizontalFlip(p=0.5),
-        ]
-        geom_local =[
-            transforms.RandomResizedCrop(local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC),
-            transforms.RandomHorizontalFlip(p=0.5),
-        ]
+        if use_ect:
+            geom_global = [
+                transforms.RandomResizedCrop(global_crops_size, scale=global_crops_scale, ratio=(1.0, 1.0), interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.RandomHorizontalFlip(p=0.5),
+            ]
+            geom_local = [
+                transforms.RandomResizedCrop(local_crops_size, scale=local_crops_scale, ratio=(1.0, 1.0), interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.RandomHorizontalFlip(p=0.5),
+                ]
+        else:
+            geom_global =[
+                transforms.RandomResizedCrop(global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.RandomHorizontalFlip(p=0.5),
+            ]
+            geom_local =[
+                transforms.RandomResizedCrop(local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC),
+                transforms.RandomHorizontalFlip(p=0.5),
+            ]
         
         if vflip_p > 0:
             geom_global.append(transforms.RandomVerticalFlip(p=vflip_p))
