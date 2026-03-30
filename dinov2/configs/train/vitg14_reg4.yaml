@@ -31,19 +31,41 @@ student:
   ffn_layer: swiglufused
   block_chunks: 4
   num_register_tokens: 4
+  interpolate_antialias: true # RSG - added these from Paul's update
+  interpolate_offset: 0.0 
 teacher:
   momentum_teacher: 0.994
 optim:
-  epochs: 200 # 8000 with early_stop=200 was used for blog post ckpt
-  early_stop: 200 
+  epochs: 110 # 8000 with early_stop=200 was used for blog post ckpt
+  early_stop: 110 # RSG - changed epochs and early_stop from 200 
   weight_decay_end: 0.2
-  base_lr: 2.0e-04  # learning rate for a batch size of 1024 (swapped from 3.5e-4 to 2.0e-4)
+  base_lr: 3.0e-04  # learning rate for a batch size of 1024 (swapped from 3.5e-4 to 2.0e-4) # RSG changed from 2.0e-04
   warmup_epochs: 10
   layerwise_decay: 1.0
 crops:
+  # --------------------------------------------------------
+  # "baseline"           : Only RandomResizedCrop + Horizontal Flip (DINOv2 Defaults)
+  # "vflip"              : Baseline + Vertical Flip
+  # "rotate90"           : Baseline + 90-degree Rotations
+  # "colorjitter_weak"   : Baseline + Subtle Color Shifts
+  # "colorjitter_strong" : Baseline + Aggressive Color Shifts
+  # "blur_weak"          : Baseline + Subtle Out-of-focus
+  # "blur_strong"        : Baseline + Heavy Scanner Blur
+  # "hed_weak"           : Baseline + Subtle HED Stain shift (0.03)
+  # "hed_medium"         : Baseline + Standard HED Stain shift (0.08)
+  # "hed_strong"         : Baseline + Aggressive HED Stain shift (0.15)
+  # "randstain_weak"     : Baseline + RandStainNA Normalization (-0.5)
+  # "randstain_medium"   : Baseline + RandStainNA Standard (-0.3)
+  # "randstain_strong"   : Baseline + RandStainNA High Diversity (0.0)
+  # "randstain_hed_combo": Baseline + Both HED and RandStain
+  # "elastic"            : Baseline + Tissue Stretching
+  # "jpeg"               : Baseline + JPEG Artifacts
+  # "combo"              : FULL PIPELINE
+  # ------------------------------
+  ablation_mode: "vflip" # RSG - modify for aug type ablation
   local_crops_size: 98
 evaluation:
-  eval_period_iterations: 5000 # save checkpoint every 10 epochs
-  bach_root: /data/eva-data/bach
-  breakhis_root: /data/eva-data/breakhis
-  pcam_root: /data/eva-data/patch_camelyon
+  eval_period_iterations: 2500 # save checkpoint every 10 epochs # RSG - changed from 5000
+  bach_root: /block/eva-data/bach
+  breakhis_root: /block/eva-data/breakhis
+  pcam_root: /block/eva-data/patch_camelyon
