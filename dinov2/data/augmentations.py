@@ -194,7 +194,7 @@ class RandStainNA(torch.nn.Module):
         return self.augment(img)
 
 class ElasticDeformation(torch.nn.Module):
-    def __init__(self, low_alpha=40.0, high_alpha=200.0, low_sigma=5.0, high_sigma=10.0, probability=0.5):
+    def __init__(self, low_alpha=50.0, high_alpha=200.0, low_sigma=5.0, high_sigma=10.0, probability=0.5):
         super().__init__()
         self.low_alpha = low_alpha
         self.high_alpha = high_alpha
@@ -406,8 +406,6 @@ class DataAugmentationDINO(object):
             
         # Color Jitter Ablations
         elif ablation_mode == "colorjitter_weak":
-            cj_params = (0.1, 0.1, 0.05, 0.02)
-        elif ablation_mode == "colorjitter_medium":
             cj_params = (0.2, 0.2, 0.1, 0.05)
         elif ablation_mode == "colorjitter_strong":
             cj_params = (0.4, 0.4, 0.2, 0.1)
@@ -415,8 +413,6 @@ class DataAugmentationDINO(object):
         # Gaussian Blur Ablations
         elif ablation_mode == "blur_weak":
             gb_params = (7, 0.3, 0.8)
-        elif ablation_mode == "blur_medium":
-            gb_params = (9, 0.5, 1)
         elif ablation_mode == "blur_strong":
             gb_params = (15, 1.5, 2.5)
             
@@ -430,11 +426,11 @@ class DataAugmentationDINO(object):
             
         # RandStainNA Ablations
         elif ablation_mode == "randstain_weak":
-            rs_hyper = -0.4
+            rs_hyper = -0.5
         elif ablation_mode == "randstain_medium":
-            rs_hyper = -0.1
+            rs_hyper = -0.35
         elif ablation_mode == "randstain_strong":
-            rs_hyper = 0.0
+            rs_hyper = -0.2
             
         # Combo Ablations (randstain + hed)
         elif ablation_mode == "randstain_hed_combo":
