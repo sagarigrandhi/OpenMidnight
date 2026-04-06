@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=elastic
+#SBATCH --job-name=baseline
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-task=8
@@ -8,13 +8,12 @@
 #SBATCH --error=slurms/%j.err
 #SBATCH --partition=main
 #SBATCH --account=training
-#SBATCH --dependency=afterany:32850 # RSG - added dependency on previous job
 
 set -euo pipefail
 
 # ---- Training config ----
 CONFIG_FILE="./dinov2/configs/train/vitg14_reg4.yaml"
-OUTPUT_DIR="/data/ratna/aug/elastic" # RSG - changed this to my dir
+OUTPUT_DIR="/data/ratna/aug/baseline" # RSG - changed this to my dir
 RESUME="False"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist # RSG - set to False
 
 # ---- Repo env ----

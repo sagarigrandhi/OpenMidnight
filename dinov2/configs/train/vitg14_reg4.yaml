@@ -63,7 +63,7 @@ crops:
   # "jpeg"               : Baseline + JPEG Artifacts
   # "combo"              : FULL PIPELINE
   # ------------------------------
-  ablation_mode: "elastic" # RSG - modify for aug type ablation
+  ablation_mode: "baseline" # RSG - modify for aug type ablation
   local_crops_size: 98
 evaluation:
   eval_period_iterations: 2500 # save checkpoint every 10 epochs # RSG - changed from 5000
