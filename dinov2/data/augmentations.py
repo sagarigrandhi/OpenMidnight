@@ -295,7 +295,7 @@ class DataAugmentationDINO(object):
         # Geometric augmentations with rotation and both flips
         self.geometric_augmentation_global = transforms.Compose(
             [
-                # RandomRotation90(),
+                RandomRotation90(),
                 transforms.RandomResizedCrop(
                     global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
@@ -306,7 +306,7 @@ class DataAugmentationDINO(object):
 
         self.geometric_augmentation_local = transforms.Compose(
             [
-                # RandomRotation90(),
+                RandomRotation90(),
                 transforms.RandomResizedCrop(
                     local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
