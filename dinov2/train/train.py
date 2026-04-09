@@ -959,9 +959,9 @@ def do_train(cfg, model, resume=False):
             resume=resume_mode,
         )
         wandb.config.update({
-            "blur_kernel": 9,
-            "blur_sigma_min": 0.1, 
-            "blur_sigma_max": 1.5,
+            "blur_kernel": 15,
+            "blur_sigma_min": 2.0, 
+            "blur_sigma_max": 4.0,
         })
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [
