@@ -297,7 +297,7 @@ class DataAugmentationDINO(object):
             [
                 # RandomRotation90(),
                 transforms.RandomResizedCrop(
-                    global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
+                    global_crops_size, scale=global_crops_scale, ratio=(1.0, 1.0), interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
                 # transforms.RandomVerticalFlip(p=0.5),
@@ -308,7 +308,7 @@ class DataAugmentationDINO(object):
             [
                 # RandomRotation90(),
                 transforms.RandomResizedCrop(
-                    local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
+                    local_crops_size, scale=local_crops_scale, ratio=(1.0, 1.0), interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
                 # transforms.RandomVerticalFlip(p=0.5),
