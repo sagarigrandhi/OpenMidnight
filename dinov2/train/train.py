@@ -958,6 +958,10 @@ def do_train(cfg, model, resume=False):
             id=run_id,
             resume=resume_mode,
         )
+        wandb.config.update({
+        "aug/ect_ratio_min": 1.0,
+        "aug/ect_ratio_max": 1.0,
+        })
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [
             Path(__file__).resolve(),
