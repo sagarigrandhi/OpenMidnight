@@ -959,7 +959,7 @@ def do_train(cfg, model, resume=False):
             resume=resume_mode,
         )
         wandb.config.update({
-        "aug/hed_perturbation_range": 0.03,
+        "aug/hed_perturbation_range": 0.05,
         })
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [

@@ -331,7 +331,7 @@ class DataAugmentationDINO(object):
             probability=0.5,
         )
 
-        hed_aug = hed_mod(probability=0.5, perturbation_range=0.03) # RSG - hed_medium
+        hed_aug = hed_mod(probability=0.5, perturbation_range=0.05) # RSG - hed_strong
 
         self.global_transfo1 = transforms.Compose([
             # randstainna,
