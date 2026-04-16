@@ -959,7 +959,7 @@ def do_train(cfg, model, resume=False):
             resume=resume_mode,
         )
         wandb.config.update({
-        "aug/randstainna_medium_std_hyper": -0.35,
+        "aug/randstainna_strong_std_hyper": -0.2,
         })
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [

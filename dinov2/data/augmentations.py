@@ -326,7 +326,7 @@ class DataAugmentationDINO(object):
         # Pathology-specific stain augmentations
         randstainna = RandStainNA(
             color_space='LAB',
-            std_hyper=-0.35, # RSG - randstain_medium
+            std_hyper=-0.2, # RSG - randstain_strong
             distribution='normal',
             probability=0.5,
         )
