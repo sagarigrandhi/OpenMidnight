@@ -958,6 +958,14 @@ def do_train(cfg, model, resume=False):
             id=run_id,
             resume=resume_mode,
         )
+        wandb.config.update(
+            {
+            "aug/low_alpha": 50.0,
+            "aug/high_alpha": 200.0,
+            "aug/low_sigma": 5.0,
+            "aug/high_sigma": 10.0,  
+            }
+        )
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [
             Path(__file__).resolve(),

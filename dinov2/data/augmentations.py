@@ -256,6 +256,54 @@ class RandomRotation90(torch.nn.Module):
         return transforms.functional.rotate(img, angle)
 
 
+class ElasticDeformation(torch.nn.Module):
+    def __init__(self, low_alpha=40.0, high_alpha=200.0, low_sigma=5.0, high_sigma=10.0, probability=0.5):
+        super().__init__()
+        self.low_alpha = low_alpha
+        self.high_alpha = high_alpha
+        self.low_sigma = low_sigma
+        self.high_sigma = high_sigma
+        self.probability = probability
+
+    def forward(self, img):
+        if random.random() > self.probability:
+            return img
+
+
+        alpha = random.uniform(self.low_alpha, self.high_alpha)
+        sigma = random.uniform(self.low_sigma, self.high_sigma)
+
+
+        if isinstance(img, Image.Image):
+            img_np = np.array(img)
+            input_type = 'PIL'
+        elif isinstance(img, torch.Tensor):
+            img_np = (img.permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+            input_type = 'Tensor'
+        else:
+            img_np = np.array(img)
+            input_type = 'Array'
+            
+        h, w = img_np.shape[:2]
+        
+        dx = cv2.GaussianBlur((np.random.rand(h, w) * 2 - 1).astype(np.float32), (0, 0), sigma) * alpha
+        dy = cv2.GaussianBlur((np.random.rand(h, w) * 2 - 1).astype(np.float32), (0, 0), sigma) * alpha
+                              
+        x, y = np.meshgrid(np.arange(w), np.arange(h))
+        map_x = (x + dx).astype(np.float32)
+        map_y = (y + dy).astype(np.float32)
+        
+        
+        distorted = cv2.remap(img_np, map_x, map_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
+        
+        
+        if input_type == 'PIL':
+            return Image.fromarray(distorted)
+        elif input_type == 'Tensor':
+            return torch.from_numpy(distorted).permute(2, 0, 1).float() / 255.0
+        return distorted
+
+
 class DataAugmentationDINO(object):
     """
     Data augmentation pipeline for DINOv2 training on histopathology images.
@@ -300,7 +348,7 @@ class DataAugmentationDINO(object):
                     global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomVerticalFlip(p=0.5),
+                # transforms.RandomVerticalFlip(p=0.5),
             ]
         )
 
@@ -311,7 +359,7 @@ class DataAugmentationDINO(object):
                     local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomVerticalFlip(p=0.5),
+                # transforms.RandomVerticalFlip(p=0.5),
             ]
         )
 
@@ -322,6 +370,15 @@ class DataAugmentationDINO(object):
                 make_normalize_transform(),
             ]
         )
+        
+        # Elastic deformation augmentation
+        elastic_aug = ElasticDeformation(
+            low_alpha=50.0,
+            high_alpha=200.0,
+            low_sigma=5.0,
+            high_sigma=10.0,
+            probability=0.5
+        ) #RSG - added elastic
 
         # Pathology-specific stain augmentations
         randstainna = RandStainNA(
@@ -334,6 +391,7 @@ class DataAugmentationDINO(object):
         hed_aug = hed_mod(probability=0.5, perturbation_range=0.05)
 
         self.global_transfo1 = transforms.Compose([
+            elastic_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
@@ -343,6 +401,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.global_transfo2 = transforms.Compose([
+            elastic_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
@@ -352,6 +411,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.local_transfo = transforms.Compose([
+            elastic_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
