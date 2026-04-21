@@ -254,6 +254,51 @@ class RandomRotation90(torch.nn.Module):
         if angle == 0:
             return img
         return transforms.functional.rotate(img, angle)
+    
+
+class JpegCompression(torch.nn.Module):
+
+    def __init__(self, quality_lower=20, quality_upper=100, probability=0.5):
+        super().__init__()
+        self.quality_lower = quality_lower
+        self.quality_upper = quality_upper
+        self.probability = probability
+
+    def forward(self, img):
+        if random.random() > self.probability:
+            return img
+
+        quality = random.randint(self.quality_lower, self.quality_upper)
+
+        was_pil = False
+        was_tensor = False
+
+        if isinstance(img, Image.Image):
+            img_np = np.array(img)
+            was_pil = True
+        elif isinstance(img, torch.Tensor):
+            img_np = (img.permute(1, 2, 0).numpy() * 255.0).astype(np.uint8)
+            was_tensor = True
+        else:
+            img_np = img
+
+        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+
+        encode_param =[int(cv2.IMWRITE_JPEG_QUALITY), quality]
+        result, encimg = cv2.imencode('.jpg', img_bgr, encode_param)
+
+        if result:
+            decimg = cv2.imdecode(encimg, 1)
+            img_rgb = cv2.cvtColor(decimg, cv2.COLOR_BGR2RGB)
+        else:
+            img_rgb = img_np
+
+        if was_pil:
+            return Image.fromarray(img_rgb)
+        elif was_tensor:
+            return torch.from_numpy(img_rgb).permute(2, 0, 1).float() / 255.0
+
+        return img_rgb
 
 
 class DataAugmentationDINO(object):
@@ -332,8 +377,11 @@ class DataAugmentationDINO(object):
         )
 
         hed_aug = hed_mod(probability=0.5, perturbation_range=0.05)
+        
+        jpeg_aug = JpegCompression(quality_lower=20, quality_upper=100, probability=0.5) # RSG - jpeg compression
 
         self.global_transfo1 = transforms.Compose([
+            jpeg_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
@@ -343,6 +391,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.global_transfo2 = transforms.Compose([
+            jpeg_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
@@ -352,6 +401,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.local_transfo = transforms.Compose([
+            jpeg_aug,
             # randstainna,
             # hed_aug,
             # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
