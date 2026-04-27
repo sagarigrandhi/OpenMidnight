@@ -8,13 +8,14 @@
 #SBATCH --error=slurms/%j.err
 #SBATCH --partition=main
 #SBATCH --account=training
+#SBATCH --dependency=afterany:48712 # after elastic job finishes
 
 set -euo pipefail
 
 # ---- Training config ----
 CONFIG_FILE="./dinov2/configs/train/vitg14_reg4.yaml"
 OUTPUT_DIR="/data/ratna/aug/jpeg" # RSG - changed to my dir
-RESUME="False"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist # RSG - set to False
+RESUME="True"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist 
 
 # ---- Repo env ----
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
