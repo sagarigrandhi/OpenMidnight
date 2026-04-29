@@ -8,7 +8,6 @@
 #SBATCH --error=slurms/%j.err
 #SBATCH --partition=main
 #SBATCH --account=training
-#SBATCH --dependency=afterany:48712 # after elastic job finishes
 
 set -euo pipefail
 
