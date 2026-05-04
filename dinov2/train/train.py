@@ -960,6 +960,10 @@ def do_train(cfg, model, resume=False):
         )
         wandb.config.update(
             {
+                "aug/colorjitter_brightness": 0.2,
+                "aug/colorjitter_contrast": 0.2,
+                "aug/colorjitter_saturation": 0.1,
+                "aug/colorjitter_hue": 0.05,
                 "aug/hed_perturbation_range": 0.05,
                 "aug/randstainna_std_hyper": -0.2,
             }

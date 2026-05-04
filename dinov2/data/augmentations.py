@@ -295,23 +295,23 @@ class DataAugmentationDINO(object):
         # Geometric augmentations with rotation and both flips
         self.geometric_augmentation_global = transforms.Compose(
             [
-                # RandomRotation90(),
+                RandomRotation90(),
                 transforms.RandomResizedCrop(
                     global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
-                # transforms.RandomVerticalFlip(p=0.5),
+                transforms.RandomVerticalFlip(p=0.5),
             ]
         )
 
         self.geometric_augmentation_local = transforms.Compose(
             [
-                # RandomRotation90(),
+                RandomRotation90(),
                 transforms.RandomResizedCrop(
                     local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
                 ),
                 transforms.RandomHorizontalFlip(p=0.5),
-            #     transforms.RandomVerticalFlip(p=0.5),
+                transforms.RandomVerticalFlip(p=0.5),
             ]
         )
 
@@ -336,7 +336,7 @@ class DataAugmentationDINO(object):
         self.global_transfo1 = transforms.Compose([
             randstainna,
             hed_aug,
-            # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
+            transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             # transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=1.0),
             self.normalize
@@ -345,7 +345,7 @@ class DataAugmentationDINO(object):
         self.global_transfo2 = transforms.Compose([
             randstainna,
             hed_aug,
-            # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
+            transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             # transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=0.1),
             self.normalize
@@ -354,7 +354,7 @@ class DataAugmentationDINO(object):
         self.local_transfo = transforms.Compose([
             randstainna,
             hed_aug,
-            # transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
+            transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             # transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=0.5),
             self.normalize

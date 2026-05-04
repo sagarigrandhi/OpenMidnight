@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=randstain_hed_combo
+#SBATCH --job-name=combo
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-task=8
@@ -13,7 +13,7 @@ set -euo pipefail
 
 # ---- Training config ----
 CONFIG_FILE="./dinov2/configs/train/vitg14_reg4.yaml"
-OUTPUT_DIR="/data/ratna/aug/randstain_hed_combo" # RSG - changed to my dir
+OUTPUT_DIR="/data/ratna/aug/combo" # RSG - changed to my dir
 RESUME="True"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist
 
 # ---- Repo env ----
