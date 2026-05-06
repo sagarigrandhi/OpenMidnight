@@ -960,6 +960,9 @@ def do_train(cfg, model, resume=False):
         )
         wandb.config.update(
             {
+                "aug/gaussian_blur_kernel_size": 9,
+                "aug/gaussian_blur_radius_min": 0.1,
+                "aug/gaussian_blur_radius_max": 1.5,
                 "aug/colorjitter_brightness": 0.4,
                 "aug/colorjitter_contrast": 0.4,
                 "aug/colorjitter_saturation": 0.2,
