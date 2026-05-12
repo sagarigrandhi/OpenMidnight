@@ -337,7 +337,7 @@ class DataAugmentationDINO(object):
             randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1)], p=0.8),
-            # transforms.RandomGrayscale(p=0.2),
+            transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=1.0),
             self.normalize
         ])
@@ -346,7 +346,7 @@ class DataAugmentationDINO(object):
             randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1)], p=0.8),
-            # transforms.RandomGrayscale(p=0.2),
+            transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=0.1),
             self.normalize
         ])
@@ -355,7 +355,7 @@ class DataAugmentationDINO(object):
             randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1)], p=0.8),
-            # transforms.RandomGrayscale(p=0.2),
+            transforms.RandomGrayscale(p=0.2),
             # GaussianBlur(p=0.5),
             self.normalize
         ])
