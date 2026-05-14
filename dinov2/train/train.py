@@ -964,8 +964,8 @@ def do_train(cfg, model, resume=False):
                 "aug/colorjitter_contrast": 0.4,
                 "aug/colorjitter_saturation": 0.2,
                 "aug/colorjitter_hue": 0.1,
-                "aug/hed_perturbation_range": 0.05,
-                "aug/randstainna_std_hyper": -0.35,
+                "aug/hed_perturbation_range": 0.03,
+                "aug/randstainna_std_hyper": -0.2,
             }
         )
         repo_root = Path(__file__).resolve().parents[2]

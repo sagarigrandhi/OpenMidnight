@@ -326,12 +326,12 @@ class DataAugmentationDINO(object):
         # Pathology-specific stain augmentations
         randstainna = RandStainNA(
             color_space='LAB',
-            std_hyper=-0.35, # RSG - randstain_medium
+            std_hyper=-0.2, # RSG - randstain_strong
             distribution='normal',
             probability=0.5,
         )
 
-        hed_aug = hed_mod(probability=0.5, perturbation_range=0.05) # RSG - hed_strong
+        hed_aug = hed_mod(probability=0.5, perturbation_range=0.03) # RSG - hed_medium
 
         self.global_transfo1 = transforms.Compose([
             randstainna,
