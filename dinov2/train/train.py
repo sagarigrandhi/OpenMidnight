@@ -958,16 +958,6 @@ def do_train(cfg, model, resume=False):
             id=run_id,
             resume=resume_mode,
         )
-        wandb.config.update(
-            {
-                "aug/colorjitter_brightness": 0.4,
-                "aug/colorjitter_contrast": 0.4,
-                "aug/colorjitter_saturation": 0.2,
-                "aug/colorjitter_hue": 0.1,
-                "aug/hed_perturbation_range": 0.05,
-                "aug/randstainna_std_hyper": -0.2,
-            }
-        )
         repo_root = Path(__file__).resolve().parents[2]
         files_to_save = [
             Path(__file__).resolve(),
