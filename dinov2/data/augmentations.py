@@ -326,7 +326,7 @@ class DataAugmentationDINO(object):
         # Pathology-specific stain augmentations
         randstainna = RandStainNA(
             color_space='LAB',
-            std_hyper=-0.3,
+            std_hyper=-0.2, # RSG - randstain_strong
             distribution='normal',
             probability=0.5,
         )
@@ -334,7 +334,7 @@ class DataAugmentationDINO(object):
         hed_aug = hed_mod(probability=0.5, perturbation_range=0.05)
 
         self.global_transfo1 = transforms.Compose([
-            # randstainna,
+            randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             transforms.RandomGrayscale(p=0.2),
@@ -343,7 +343,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.global_transfo2 = transforms.Compose([
-            # randstainna,
+            randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             transforms.RandomGrayscale(p=0.2),
@@ -352,7 +352,7 @@ class DataAugmentationDINO(object):
         ])
 
         self.local_transfo = transforms.Compose([
-            # randstainna,
+            randstainna,
             hed_aug,
             transforms.RandomApply([transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.1, hue=0.05)], p=0.8),
             transforms.RandomGrayscale(p=0.2),
