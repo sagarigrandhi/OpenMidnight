@@ -13,7 +13,7 @@ set -euo pipefail
 
 # ---- Training config ----
 CONFIG_FILE="./dinov2/configs/train/vitg14_reg4.yaml"
-OUTPUT_DIR="/data/ratna/aug/retrain_colorjitter_strong"  
+OUTPUT_DIR="/data/ratna/OM_augmentations/retrain_colorjitter_strong"  
 RESUME="True"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist
 
 # ---- Repo env ----
