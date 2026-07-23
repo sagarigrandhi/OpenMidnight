@@ -5,7 +5,7 @@ from torchvision import transforms
 print("loading base")
 dinov2 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg')
 
-ours = torch.load("checkpoints/teacher_epoch250000.pth")
+ours = torch.load("/data/ratna/OM_retrain_3e-4/eval/averaged_87500_to_137500/teacher_checkpoint.pth") # RSG - modified to final averaged checkpoint
 checkpoint = ours["teacher"]
 checkpoint_new = {}
 
