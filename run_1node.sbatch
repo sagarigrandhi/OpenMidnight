@@ -7,7 +7,9 @@
 #SBATCH --output=slurms/%j.out
 #SBATCH --error=slurms/%j.err
 #SBATCH --partition=main
-#SBATCH --account=training
+#SBATCH --account=max # RSG - changed it from training to max
+#SBATCH --qos=high
+
 
 set -euo pipefail
 
