@@ -46,6 +46,10 @@ mkdir -p "${TORCH_HOME}" "${TRITON_CACHE_DIR}"
 echo "Prewarming torch.hub into ${TORCH_HOME}"
 uv run python -c "import torch; torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg', trust_repo=True)"
 
+echo "=== Config being used for this run ==="
+grep -E "epochs|early_stop|sample_list_path" "${CONFIG_FILE}"
+echo "======================================="
+
 uv run torchrun \
   --nnodes 1 \
   --nproc_per_node 8 \
