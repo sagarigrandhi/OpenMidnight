@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=OM_retrain_3e-4
+#SBATCH --job-name=OM_retrain_3e-4_kde_fixed
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-task=8
@@ -7,13 +7,14 @@
 #SBATCH --output=slurms/%j.out
 #SBATCH --error=slurms/%j.err
 #SBATCH --partition=main
-#SBATCH --account=training
+#SBATCH --account=max
+#SBATCH --qos=high
 
 set -euo pipefail
 
 # ---- Training config ----
 CONFIG_FILE="./dinov2/configs/train/vitg14_reg4.yaml"
-OUTPUT_DIR="/data/ratna/OM_retrain_3e-4"
+OUTPUT_DIR="/data/ratna/OM_retrain_3e-4_kde_fixed"
 RESUME="True"   # "True" to keep OUTPUT_DIR and resume if checkpoints exist
 
 # ---- Repo env ----
@@ -43,6 +44,14 @@ mkdir -p "${TORCH_HOME}" "${TRITON_CACHE_DIR}"
 
 echo "Prewarming torch.hub into ${TORCH_HOME}"
 uv run python -c "import torch; torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg', trust_repo=True)"
+
+echo "=== Config being used for this run ==="
+grep -E "epochs|early_stop|sample_list_path|base_lr" "${CONFIG_FILE}"
+echo "======================================="
+
+echo "=== Confirming KDE loss sign fix ==="
+grep -A 3 "return -entropy\|return entropy" dinov2/loss/kde_loss.py
+echo "======================================="
 
 uv run torchrun \
   --nnodes 1 \

@@ -30,4 +30,7 @@ class KDELoss(nn.Module):
         k = self.vmF(student_output, student_output, kappa)
         density_estimates = k.sum(dim=1)  # [n]
         entropy = -torch.log(density_estimates + 1e-9).mean()
-        return entropy
+        # This is added to the minimized loss in ssl_meta_arch, so it has to be
+        # the quantity we want driven down. entropy is high when embeddings are
+        # spread out, so returning it rewarded collapse. Return -entropy.
+        return -entropy
