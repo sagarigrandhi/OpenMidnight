@@ -50,6 +50,10 @@ echo "=== Config being used for this run ==="
 grep -E "epochs|early_stop|sample_list_path" "${CONFIG_FILE}"
 echo "======================================="
 
+echo "=== Confirming KDE loss sign fix ==="
+grep -A 2 "return -entropy\|return entropy" dinov2/loss/kde_loss.py
+echo "======================================="
+
 uv run torchrun \
   --nnodes 1 \
   --nproc_per_node 8 \
